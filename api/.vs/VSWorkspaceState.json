@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\config",
+    "\\migrations",
+    "\\models",
+    "\\routes",
+    "\\seed"
+  ],
+  "SelectedNode": "\\routes\\courses.js",
+  "PreviewInSolutionExplorer": false
+}
