@@ -9,7 +9,7 @@ import UserSignUp from './component/UserSignUp';
 import UserSignOut from './component/UserSignOut';
 import CreateCourse from './component/CreateCourse'
 import UpdateCourse from './component/UpdateCourse';
-import axios from 'axios';
+//import axios from 'axios';
 import {
     BrowserRouter as Router,
     Route,
@@ -34,22 +34,22 @@ function PrivateRoute({ component: Component, ...rest }) {
 }
 
 class App extends Component {
-    authenticate = (email, password, props) => {
-        if (localStorage.getItem('authenticated') !== 'true') {
-            localStorage.setItem('authenticated', 'false');
-        }
-        if (localStorage.getItem('authenticated') === 'false') {
-            axios('http://localhost:5000/api/users', { auth: { username: email, password: password } })
-                .then(function (response) {
-                    localStorage.setItem('authenticated', 'true');
-                    localStorage.setItem('firstName', response.data.user[0].firstName);
-                    localStorage.setItem('lastName', response.data.user[0].lastName);
-                    localStorage.setItem('email', email);
-                    localStorage.setItem('password', password);
-                    props.props.history.push(localStorage.getItem('path'));
-                }).catch(error => { console.log('Error on Authentication ', error); });
-        } 
-    }
+    //authenticate = (email, password, props) => {
+    //    if (localStorage.getItem('authenticated') !== 'true') {
+    //        localStorage.setItem('authenticated', 'false');
+    //    }
+    //    if (localStorage.getItem('authenticated') === 'false') {
+    //        axios('http://localhost:5000/api/users', { auth: { username: email, password: password } })
+    //            .then(function (response) {
+    //                localStorage.setItem('authenticated', 'true');
+    //                localStorage.setItem('firstName', response.data.user[0].firstName);
+    //                localStorage.setItem('lastName', response.data.user[0].lastName);
+    //                localStorage.setItem('email', email);
+    //                localStorage.setItem('password', password);
+    //                props.props.history.push(localStorage.getItem('path'));
+    //            }).catch(error => { console.log('Error on Authentication ', error); });
+    //    } 
+    //}
 
     render() {
             
@@ -57,7 +57,7 @@ class App extends Component {
                 <Router>
                     <Switch>
                         <Route path='/' exact component={Courses} />
-                        <Route path='/courses/signin' render={(props) => <UserSignIn authenticate={this.authenticate} props={props} />} />
+                        <Route path='/courses/signin' render={(props) => <UserSignIn props={props} />} />
                         <Route path='/courses/signup' component={UserSignUp} />
                         <Route path='/courses/signout' component={UserSignOut} />
                         <PrivateRoute path='/courses/create' component={CreateCourse} />

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 import Header from './Header';
-
+import { Link } from 'react-router-dom';
 class CourseDetail extends Component {
 
     constructor() {
@@ -31,7 +31,7 @@ class CourseDetail extends Component {
                         <div>
                             <div className="actions--bar">
                                 <div className="bounds">
-                                    <div className="grid-100"><span><a className="button" href="update-course.html">Update Course</a><a className="button" href="index.html">Delete Course</a></span><a
+                                    <div className="grid-100"><span><Link className="button" to={`/courses/${this.props.match.params.id}/update`}>Update Course</Link><a className="button" href="index.html">Delete Course</a></span><a
                                         className="button button-secondary" href="index.html">Return to List</a></div>
                                 </div>
                             </div>
