@@ -33,7 +33,7 @@ class UpdateCourse extends Component {
             if (this.title.value !== '' && this.description.value !== '') {
                 axios.put(`http://localhost:5000/api/courses/${this.props.match.params.id}`, { description: this.description.value, materialsNeeded: this.materialsNeeded.value, title: this.title.value, estimatedTime: this.estimatedTime.value },
                     { auth: { username: localStorage.getItem('email'), password: localStorage.getItem('password') } })
-                    .then(() => this.props.history.push(localStorage.getItem('path')));
+                    .then(() => this.props.history.push(localStorage.getItem('path'))).catch(error => { (error.status === 500) ? this.props.history.push('/error') : this.props.history.push('/notfound'); });
             } else {
                 this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul>Title and description must have a value.</ul></div></div>);
                 this.forceUpdate();
@@ -50,6 +50,9 @@ class UpdateCourse extends Component {
 
     render() {
         if (this.state.response.length !== 0) {
+            if (this.state.response.data.user.emailAddress !== localStorage.getItem('email')) {
+                this.props.history.push('/forbidden');
+            }
             return (
                 <div id="root">
                     <div>

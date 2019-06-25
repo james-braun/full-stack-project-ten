@@ -14,7 +14,10 @@ class Courses extends Component {
     performSearch = () => {
         axios('http://localhost:5000/api/courses').then(response => {
             this.setState({ response: response });
-        }).catch(error => { console.log('Error fetching and parsing data ', error); });
+        }).catch(error => {
+            console.log('Error fetching and parsing data ', error);
+            this.props.history.push('/error');
+        });
     }
 
     componentDidMount() {

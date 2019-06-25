@@ -11,7 +11,7 @@ import CreateCourse from './component/CreateCourse'
 import UpdateCourse from './component/UpdateCourse';
 import NotFound from './component/NotFound';
 import Forbidden from './component/Forbidden';
-
+import Error from './component/Error';
 
 import {
     BrowserRouter as Router,
@@ -46,7 +46,7 @@ class App extends Component {
                         <Route path='/' exact component={Courses} />
                         <Route path='/signin' render={(props) => <UserSignIn props={props} />} />
                         <Route path='/signup' component={UserSignUp} />
-                        <Route path='/courses/signout' component={UserSignOut} />
+                        <Route path='/signout' component={UserSignOut} />
                         <PrivateRoute path='/courses/create' component={CreateCourse} />
                         <Route path='/courses/:id' exact component={CourseDetail} />
                         <PrivateRoute path='/courses/:id/update' component={UpdateCourse} />

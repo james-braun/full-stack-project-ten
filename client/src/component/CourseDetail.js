@@ -24,7 +24,7 @@ class CourseDetail extends Component {
             this.setState({ response: response });
         }).catch(error => {
             console.log('Error fetching and parsing data ', error);
-            this.props.history.push('/notfound');
+            (error.status === 500) ? this.props.history.push('/error') : this.props.history.push('/notfound');
         });
     }
 
@@ -32,7 +32,7 @@ class CourseDetail extends Component {
         e.preventDefault()
         const httpVariable = `http://localhost:5000/api/courses/${this.props.match.params.id}`;
         axios.delete(httpVariable, { auth: { username: localStorage.getItem('email'), password: localStorage.getItem('password') } })
-            .then(() => this.props.history.push('/'));
+            .then(() => this.props.history.push('/')).catch(error => { this.props.history.push('/error') });
     }
 
     componentDidMount() {
