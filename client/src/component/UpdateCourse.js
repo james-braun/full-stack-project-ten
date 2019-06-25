@@ -12,12 +12,36 @@ class UpdateCourse extends Component {
     }
     estimatedTime = React.createRef();
     title = React.createRef();
+    description = React.createRef();
+    materialsNeeded = React.createRef();
+    errorsjsx;
 
     performSearch = () => {
         var httpVariable = `http://localhost:5000/api/courses/${this.props.match.params.id}`;
         axios(httpVariable).then(response => {
             this.setState({ response: response });
-        }).catch(error => { console.log('Error fetching and parsing data ', error); });
+            console.log(response);
+        }).catch(error => {
+            console.log('Error fetching and parsing data ', error);
+            this.props.history.push('/notfound');
+        });
+    }
+
+    updateCourse = (e) => {
+        e.preventDefault();
+        if (this.state.response.data.user.emailAddress === localStorage.getItem('email')) {
+            if (this.title.value !== '' && this.description.value !== '') {
+                axios.put(`http://localhost:5000/api/courses/${this.props.match.params.id}`, { description: this.description.value, materialsNeeded: this.materialsNeeded.value, title: this.title.value, estimatedTime: this.estimatedTime.value },
+                    { auth: { username: localStorage.getItem('email'), password: localStorage.getItem('password') } })
+                    .then(() => this.props.history.push(localStorage.getItem('path')));
+            } else {
+                this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul>Title and description must have a value.</ul></div></div>);
+                this.forceUpdate();
+            }
+        } else {
+            this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul>User does not have permission to edit this course.</ul></div></div>);
+            this.forceUpdate();
+        }
     }
 
     componentDidMount() {
@@ -33,7 +57,8 @@ class UpdateCourse extends Component {
                         <div className="bounds course--detail">
                             <h1>Update Course</h1>
                             <div>
-                                <form>
+                                {this.errorsjsx}
+                                <form onSubmit={this.updateCourse}>
                                     <div className="grid-66">
                                         <div className="course--header">
                                             <h4 className="course--label">Course</h4>
@@ -41,7 +66,7 @@ class UpdateCourse extends Component {
                                             <p>By {this.state.response.data.user.firstName} {this.state.response.data.user.lastName}</p>
                                             </div>
                                             <div className="course--description">
-                                            <div><textarea id="description" name="description" className="" placeholder="Course description..." defaultValue={this.state.response.data.course.description}></textarea></div>
+                                            <div><textarea id="description" name="description" className="" placeholder="Course description..." ref={(input) => this.description = input} defaultValue={this.state.response.data.course.description}></textarea></div>
                                             </div>
                                         </div>
                                         <div className="grid-25 grid-right">
@@ -53,13 +78,12 @@ class UpdateCourse extends Component {
                                                     </li>
                                                     <li className="course--stats--list--item">
                                                     <h4>Materials Needed</h4>
-                                                    <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." defaultValue={this.state.response.data.course.materialsNeeded}>
-                                                            </textarea></div>
+                                                    <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." ref={(input) => this.materialsNeeded = input} defaultValue={this.state.response.data.course.materialsNeeded}></textarea></div>
                                                     </li>
                                                 </ul>
                                                 </div>
                                         </div>
-                                    <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button><button className="button button-secondary" onClick={(event) => { event.preventDefault(); window.location.href = 'course-detail.html'; }}>Cancel</button></div>
+                                    <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button><button className="button button-secondary" onClick={(event) => { event.preventDefault(); window.location.href = `/courses/${this.props.match.params.id}`; }}>Cancel</button></div>
                                 </form>
                                     </div>
                                 </div>

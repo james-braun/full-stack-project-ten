@@ -25,8 +25,8 @@ class Courses extends Component {
         let courses;
         if (this.state.response.length !== 0) {
             const results = this.state.response.data
-            courses = results.map((course, index) => 
-                <div key={index} className="grid-33"><Link className="course--module course--link" to={`/courses/${index + 1}`} >
+            courses = results.map((course) => 
+                <div key={course.course.id} className="grid-33"><Link className="course--module course--link" to={`/courses/${course.course.id}`} >
                     <h4 className="course--label">Course</h4>
                     <h3 className="course--title">{course.course.title}</h3>
                 </Link></div>

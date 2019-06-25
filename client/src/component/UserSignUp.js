@@ -24,7 +24,6 @@ class UserSignUp extends Component {
 
      createUser = (e) => {
         e.preventDefault();
-        // var that = this;
         var noCreationError = true;
         var regExpression = /^[^@]+@[^@.]+\.[a-z]+$/i;
         if (regExpression.test(this.emailAddress.value)) {

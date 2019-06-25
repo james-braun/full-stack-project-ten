@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 import Header from './Header';
 import { Link } from 'react-router-dom';
+
 class CourseDetail extends Component {
 
     constructor() {
@@ -11,11 +12,27 @@ class CourseDetail extends Component {
             response: [],
         }
     }
+
+   
+    buttons;
     performSearch = () => {
-        var httpVariable = `http://localhost:5000/api/courses/${this.props.match.params.id}`;
+        const httpVariable = `http://localhost:5000/api/courses/${this.props.match.params.id}`;
+        localStorage.setItem('path', `/courses/${this.props.match.params.id}`)
         axios(httpVariable).then(response => {
+            (response.data.user.emailAddress === localStorage.getItem('email')) ?
+                this.buttons = <span><Link className="button" to={`/courses/${this.props.match.params.id}/update`}>Update Course</Link><button className="button" onClick={(event) => { this.handleDeleteButtonClick(event) }}>Delete Course</button></span> : this.buttons = null;
             this.setState({ response: response });
-        }).catch(error => { console.log('Error fetching and parsing data ', error); });
+        }).catch(error => {
+            console.log('Error fetching and parsing data ', error);
+            this.props.history.push('/notfound');
+        });
+    }
+
+    handleDeleteButtonClick = (e) => {
+        e.preventDefault()
+        const httpVariable = `http://localhost:5000/api/courses/${this.props.match.params.id}`;
+        axios.delete(httpVariable, { auth: { username: localStorage.getItem('email'), password: localStorage.getItem('password') } })
+            .then(() => this.props.history.push('/'));
     }
 
     componentDidMount() {
@@ -31,8 +48,7 @@ class CourseDetail extends Component {
                         <div>
                             <div className="actions--bar">
                                 <div className="bounds">
-                                    <div className="grid-100"><span><Link className="button" to={`/courses/${this.props.match.params.id}/update`}>Update Course</Link><a className="button" href="index.html">Delete Course</a></span><a
-                                        className="button button-secondary" href="index.html">Return to List</a></div>
+                                    <div className="grid-100">{this.buttons}<Link className="button button-secondary" to="/">Return to List</Link></div>
                                 </div>
                             </div>
                             <div className="bounds course--detail">
