@@ -40,8 +40,12 @@ class UserSignIn extends Component {
 
                     // handle errors.
                     }).catch(error => {
-                        this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul><li>Error user does not exist or wrong password.</li></ul></div></div>);
-                        this.forceUpdate();
+                        if (error.response) {
+                            (error.response.status === 500) ? this.props.props.history.push('/notfound') : this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul><li>Error user does not exist or wrong password.</li></ul></div></div>);
+                            this.forceUpdate();
+                        } else {
+                             this.props.props.history.push('/error');
+                        }
                         console.log('Error on Authentication ', error);
                     });
             }

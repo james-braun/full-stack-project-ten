@@ -9,7 +9,7 @@ import CreateCourse from './component/CreateCourse'
 import UpdateCourse from './component/UpdateCourse';
 import NotFound from './component/NotFound';
 import Forbidden from './component/Forbidden';
-import Error from './component/Error';
+import UnHandledError from './component/UnhandledError';
 
 import {
     BrowserRouter as Router,
@@ -52,7 +52,7 @@ class App extends Component {
                         <PrivateRoute path='/courses/:id/update' component={UpdateCourse} />
                         <Route path='/notfound' component={NotFound} />
                         <Route path='/forbidden' component={Forbidden} />
-                        <Route path='/error' component={Error} />
+                        <Route path='/error' component={UnHandledError} />
                         <Route component={NotFound} />
                     </Switch>
                 </Router>

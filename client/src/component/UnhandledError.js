@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from './Header';
 
-const Error = () => {
+const UnHandledError = () => {
     return (
         <div id="root">
             <div>
@@ -15,4 +15,4 @@ const Error = () => {
     );
 }
 
-export default Error;
+export default UnHandledError;

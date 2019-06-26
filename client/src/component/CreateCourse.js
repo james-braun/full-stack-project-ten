@@ -79,9 +79,15 @@ class CreateCourse extends Component {
                     .then(() => this.props.history.push('/'))
 
                     // deal with errors.
-                    .catch(error => { console.log('there has been a course creation error ' + error);
-                        this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul>Course creation error.</ul></div></div>);
-                        this.forceUpdate();
+                    .catch(error => {
+                        console.log('there has been a course creation error ' + error);
+                        if (error.response) {
+                            (error.response.status === 500) ? this.props.history.push('/notfound') : this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul>Course creation error.</ul></div></div>);
+                            this.forceUpdate();
+                        } else {
+                            this.props.history.push('/error');
+                        }
+                       
                     });
             }
 
