@@ -20,7 +20,6 @@ class UpdateCourse extends Component {
         var httpVariable = `http://localhost:5000/api/courses/${this.props.match.params.id}`;
         axios(httpVariable).then(response => {
             this.setState({ response: response });
-            console.log(response);
         }).catch(error => {
             console.log('Error fetching and parsing data ', error);
             this.props.history.push('/notfound');

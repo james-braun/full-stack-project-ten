@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Header from './Header';
 import axios from 'axios';
-import { setTimeout } from 'timers';
 
 class CreateCourse extends Component {
     constructor() {
@@ -32,7 +31,6 @@ class CreateCourse extends Component {
         e.preventDefault();
         this.errorsjsx = [];
         var errors = [];
-        var noCreateCourseError = true;
         if (this.title.value === '') {
             errors.push(<li key='1'>Please provide a value for "title"</li>);
         }
@@ -52,14 +50,11 @@ class CreateCourse extends Component {
                     materialsNeeded: this.state.materialsNeeded,
                     estimatedTime: this.estimatedTime.value
                 }, { auth: { username: localStorage.getItem('email'), password: localStorage.getItem('password') } })
-                    //.then(setTimeout(() => this.props.history.push('/'), 500), (rej) => { console.log('HI! ' + rej); })
-                    .catch(error => { console.log('there has been a course creation error ' + error); noCreateCourseError = false; });
-                setTimeout(() => {
-                    if (noCreateCourseError) { this.props.history.push('/') } else {
+                    .then(() => this.props.history.push('/'))
+                    .catch(error => { console.log('there has been a course creation error ' + error);
                         this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul>Course creation error.</ul></div></div>);
                         this.forceUpdate();
-                    }
-                }, 500);
+                    });
             }
 
         }

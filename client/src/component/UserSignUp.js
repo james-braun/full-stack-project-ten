@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Header from './Header';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { setTimeout } from 'timers';
+
 
 class UserSignUp extends Component {
 
@@ -24,7 +24,6 @@ class UserSignUp extends Component {
 
      createUser = (e) => {
         e.preventDefault();
-        var noCreationError = true;
         var regExpression = /^[^@]+@[^@.]+\.[a-z]+$/i;
         if (regExpression.test(this.emailAddress.value)) {
             if (this.confirmPassword.value === this.password.value) {
@@ -33,15 +32,9 @@ class UserSignUp extends Component {
                     lastName: this.lastName.value,
                     emailAddress: this.emailAddress.value,
                     password: this.password.value
-                }).catch((error) => { console.log('Error creating user ' + error); noCreationError = false; });
-                setTimeout(() => {
-                    if (noCreationError) {
-                        this.userCreated();
-                    } else {
-                        this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul><li>User already exists error.</li></ul></div></div>);
-                        this.forceUpdate();
-                    }
-                }, 500);
+                }).then(() => this.userCreated()).catch((error) => { console.log('Error creating user ' + error); 
+                this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul><li>User already exists error.</li></ul></div></div>);
+                this.forceUpdate();});
             } else {
                 this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul><li>Passwords don't match.</li></ul></div></div>);
                 this.forceUpdate();
