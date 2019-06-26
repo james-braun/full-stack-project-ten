@@ -11,29 +11,44 @@ class Courses extends Component {
 			response: [],
         }
     }
+
+    // this function gets a list of courses.
     performSearch = () => {
         axios('http://localhost:5000/api/courses').then(response => {
+
+            // set response to the list of courses.
             this.setState({ response: response });
+
+        // handle errors.
         }).catch(error => {
             console.log('Error fetching and parsing data ', error);
             this.props.history.push('/error');
         });
     }
 
+    // perform search when page loads.
     componentDidMount() {
         this.performSearch();
     }
 
     render() {
+
+        // list of courses to be displayed.
         let courses;
+
+        // initially set to an empty array when response is initialized
+        // it becomes an object and the length turns from 0 to null.
         if (this.state.response.length !== 0) {
+
+            // map each course to courses.
             const results = this.state.response.data
             courses = results.map((course) => 
                 <div key={course.course.id} className="grid-33"><Link className="course--module course--link" to={`/courses/${course.course.id}`} >
                     <h4 className="course--label">Course</h4>
                     <h3 className="course--title">{course.course.title}</h3>
                 </Link></div>
-			);
+            );
+
             return (
                 <div id="root">
                     <div>

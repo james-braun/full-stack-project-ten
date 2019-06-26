@@ -6,13 +6,17 @@ import { Link } from 'react-router-dom';
 
 class UserSignUp extends Component {
 
+    // create input variables.
     emailAddress = React.createRef();
     password = React.createRef();
     firstName = React.createRef();
     lastName = React.createRef();
     confirmPassword = React.createRef();
+
+    // holds jsx errors.
     errorsjsx;
 
+    // function logsin user.
     userCreated = () => {
         localStorage.setItem('authenticated', 'true');
         localStorage.setItem('firstName', this.firstName.value);
@@ -23,15 +27,23 @@ class UserSignUp extends Component {
     }
 
      createUser = (e) => {
-        e.preventDefault();
+         e.preventDefault();
+
+         // if email is valid...
         var regExpression = /^[^@]+@[^@.]+\.[a-z]+$/i;
-        if (regExpression.test(this.emailAddress.value)) {
-            if (this.confirmPassword.value === this.password.value) {
+         if (regExpression.test(this.emailAddress.value)) {
+
+            // if passwords match...
+             if (this.confirmPassword.value === this.password.value) {
+
+                // signin user...
                 axios.post('http://localhost:5000/api/users', {
                     firstName: this.firstName.value,
                     lastName: this.lastName.value,
                     emailAddress: this.emailAddress.value,
                     password: this.password.value
+
+                    // login user and catch any errors.
                 }).then(() => this.userCreated()).catch((error) => { console.log('Error creating user ' + error); 
                 this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul><li>User already exists error.</li></ul></div></div>);
                 this.forceUpdate();});

@@ -14,43 +14,71 @@ class CreateCourse extends Component {
         this.createCourse = this.createCourse.bind(this);
     }
 
+    // creates a value for description.
     handleDescriptionChange(event) {
         this.setState({ description: event.target.value });
     }
 
+    // creates a value for materials needeed.
     handleMaterialsNeededChange(event) {
         this.setState({ materialsNeeded: event.target.value });
     }
 
+    // creates a value for title.
     title = React.createRef();
-    estimatedTime = React.createRef();
-    errorsjsx;
-   
 
+    // creates a value for estimated time.
+    estimatedTime = React.createRef();
+
+    // hold jsx for error validation.
+    errorsjsx;
+
+    // this method creates a course.
     createCourse = (e) => {
+
         e.preventDefault();
+
+        // holds jsx for error validation.
         this.errorsjsx = [];
         var errors = [];
+
+        // if title error add title error validation.
         if (this.title.value === '') {
             errors.push(<li key='1'>Please provide a value for "title"</li>);
         }
+
+        // if descrition error add error validation.
         if (this.state.description === '') {
             errors.push(<li key='2'>please provide a value for "Description"</li>);
         }
+
+        // post errors.
         if (errors.length > 0) {
             this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul>{errors}</ul></div></div>);
             this.forceUpdate();
         }
+
+        // if no errors.
         if (errors.length < 1) {
+
+            // clear all former errors.
             this.forceUpdate();
+
+            // if user is authenticated...
             if ((localStorage.getItem('authenticated') === 'true')) {
+
+                // create user.
                 axios.post('http://localhost:5000/api/courses', {
                     title: this.title.value,
                     description: this.state.description,
                     materialsNeeded: this.state.materialsNeeded,
                     estimatedTime: this.estimatedTime.value
                 }, { auth: { username: localStorage.getItem('email'), password: localStorage.getItem('password') } })
+
+                    // return to home screen.
                     .then(() => this.props.history.push('/'))
+
+                    // deal with errors.
                     .catch(error => { console.log('there has been a course creation error ' + error);
                         this.errorsjsx = (<div><h2 className="validation--errors--label">Validation errors</h2><div className="validation-errors"><ul>Course creation error.</ul></div></div>);
                         this.forceUpdate();

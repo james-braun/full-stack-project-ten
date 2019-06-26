@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-
-//import axios from 'axios';
 import './App.css';
 import Courses from './component/Courses';
 import UserSignIn from './component/UserSignIn'
@@ -20,6 +18,8 @@ import {
     Switch
 } from "react-router-dom";
 
+// function taken and modified from:
+// https://reacttraining.com/react-router/web/example/auth-workflow
 function PrivateRoute({ component: Component, ...rest }) {
     return (
         <Route
